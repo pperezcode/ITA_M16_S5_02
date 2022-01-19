@@ -4,15 +4,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.jocdedaus.apidaus.model.document.Partida;
 import com.jocdedaus.apidaus.model.entity.Jugador;
-import com.jocdedaus.apidaus.model.entity.Partida;
 
 @Component
 public interface JocDausService {
 
 	void jugarPartidaJugadorById(Integer idJugador, Partida partida);
 
-	void eliminarPartidesJugadorId(Integer idJugador);
+	//void eliminarPartidesJugadorId(Integer idJugador);
+	int eliminarPartidesJugadorId(Integer idJugador);
 
 	boolean existeixNomJugador(Jugador jugador);
 	

@@ -2,18 +2,14 @@ package com.jocdedaus.apidaus.model.entity;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Transient;
 
-@Document(collection = "Jugadors")
 @Entity
-@Table(name = "Jugadors")
 public class Jugador {
 	
 	public Jugador() {}
@@ -24,17 +20,9 @@ public class Jugador {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "IdJugador")
 	private Integer idJugador;
-	
-	@Column(name = "Nom")
 	private String nom;
-
-	
-	@Column(name = "DataRegistre")
 	private LocalDateTime dataRegistre;
-	
-	@Column(scale = 2, name = "PercentatgeExit")
 	private double percentatgeExit;
 	
 	public Integer getIdJugador() {

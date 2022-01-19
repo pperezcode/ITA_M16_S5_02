@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,23 +16,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jocdedaus.apidaus.model.document.Partida;
 import com.jocdedaus.apidaus.model.entity.Jugador;
-import com.jocdedaus.apidaus.model.entity.Partida;
 import com.jocdedaus.apidaus.model.service.JocDausService;
-
-import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/players")
 public class JocDausController {
 
 	@Autowired
-	@Qualifier("mysql")
-	//@Qualifier("mongodb")
 	JocDausService jdService;
 	
 	@GetMapping("/hello")
-	@ApiOperation(value = "Validació JWT", notes = "Validació JWT")
 	public ResponseEntity<?> sayHello() {
 		try {
 			return ResponseEntity.status(HttpStatus.OK).body("Validació correcta");
@@ -43,7 +37,6 @@ public class JocDausController {
 	}
 	
 	@PostMapping
-	@ApiOperation(value = "Crear un jugador", notes = "Crea un jugador amb nom únic, opcional (si no indica nom, es dirà 'ANÒNIM')")
 	public ResponseEntity<?> crearJugador(@RequestBody Jugador jugador)	{		
 		try {	
 			// Verificar que jugador s'introdueix amb el paràmetre 'nom'
@@ -69,7 +62,6 @@ public class JocDausController {
 	}
 	
 	@PostMapping("/{idJugador}/games")
-	@ApiOperation(value = "Realitzar partida", notes = "Un jugador específic ('idJugador') realitza una tirada de daus")
 	public ResponseEntity<?> jugarPartida(@PathVariable("idJugador") Integer idJugador) {
 		try {
 			// Validar que el jugador existeix
@@ -88,7 +80,6 @@ public class JocDausController {
 	}
 	
 	@PutMapping
-	@ApiOperation(value = "Modificar nom jugador", notes = "Modificar nom jugador a partir de 'id' i 'nom'")
 	public ResponseEntity<?> actualitzarNomJugador(@RequestBody Jugador jugador) {
 		try {
 			// Validar que el jugador existeix
@@ -111,7 +102,6 @@ public class JocDausController {
 	
 	@DeleteMapping("/{idJugador}/games")
 	@Transactional
-	@ApiOperation(value = "Eliminar partides jugador", notes = "Eliminar totes les partides d'un jugador ('idJugador') i actualitzar % d'exit a 0")
 	public ResponseEntity<?> eliminarPartidesJugador(@PathVariable("idJugador") Integer idJugador) {
 		
 		try {
@@ -132,7 +122,6 @@ public class JocDausController {
 	}
 		
 	@GetMapping
-	@ApiOperation(value = "Llistat de jugadors", notes = "Retorna el llistat de tots els jugadors del sistema amb el seu percentatge mig d’èxits")
 	public ResponseEntity<?> getJugadorsAmbPercentatgeExit() {
 		try {
 			// Retornar la llista de jugadors amb % èxit
@@ -143,7 +132,6 @@ public class JocDausController {
 	}
 	
 	@GetMapping("/{idJugador}/games")
-	@ApiOperation(value = "Llistat de partides per jugador", notes = "Retorna el llistat de partides del jugador ('idJugador')")
 	public ResponseEntity<?> getTiradesbyJugador(@PathVariable("idJugador") Integer idJugador) {
 		try {
 			// Validar que el jugador existeix
@@ -164,7 +152,6 @@ public class JocDausController {
 	}
 	
 	@GetMapping("/ranking")
-	@ApiOperation(value = "Ranking mig de jugadors", notes = "Retorna el ranking mig de tots els jugadors del sistema (percentatge mig d’èxits)")
 	public ResponseEntity<?> rankingPlayers() {
 		try {
 			// Retornar llista de jugadors ordenats per % èxit
@@ -176,7 +163,6 @@ public class JocDausController {
 	}
 	
 	@GetMapping("/ranking/loser")
-	@ApiOperation(value = "Jugador perdedor", notes = "Retorna el jugador amb pitjor percentatge d’èxit")
 	public ResponseEntity<?> loser() {
 		try {
 			// Retornar jugador amb el pitjor % d'èxit
@@ -188,7 +174,6 @@ public class JocDausController {
 	}
 	
 	@GetMapping("/ranking/winner")
-	@ApiOperation(value = "Jugador guanyador", notes = "Retorna el jugador amb millor percentatge d’èxit")
 	public ResponseEntity<?> winner() {
 		try {
 			// Retornar jugador amb el pitjor % d'èxit

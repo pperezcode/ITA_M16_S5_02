@@ -2,18 +2,17 @@ package com.jocdedaus.apidaus.model.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import com.jocdedaus.apidaus.model.document.Partida;
 import com.jocdedaus.apidaus.model.entity.Jugador;
-import com.jocdedaus.apidaus.model.entity.Partida;
 import com.jocdedaus.apidaus.model.repository.JugadorRepository;
 import com.jocdedaus.apidaus.model.repository.PartidaRepository;
 
-@Service("mysql")
-@Primary
+@Service
 public class JocDausServiceImpl implements JocDausService {
 
 	@Autowired
@@ -22,36 +21,87 @@ public class JocDausServiceImpl implements JocDausService {
 	@Autowired
 	PartidaRepository partidaRepo;
 	
+//	@Override
+//	public void jugarPartidaJugadorById(Integer idJugador, Partida partida) {
+//		// Assignem un jugador a una partida
+//		partida.setJugador(jugadorRepo.getById(idJugador));
+//		
+//		// Guardar la partida
+//		partidaRepo.save(partida);
+//		
+//		// Calcular % èxit del jugador
+//		double exit = getPercentatgeExit(idJugador);
+//		
+//		// Guardar nou percentatge èxit
+//		Jugador jugador = jugadorRepo.getById(idJugador);
+//		jugador.setPercentatgeExit(exit);
+//		jugadorRepo.save(jugador);
+//	}
+
 	@Override
 	public void jugarPartidaJugadorById(Integer idJugador, Partida partida) {
-		// Assignem un jugador a una partida
-		partida.setJugador(jugadorRepo.getById(idJugador));
-		
-		// Guardar la partida
-		partidaRepo.save(partida);
-		
-		// Calcular % èxit del jugador
-		double exit = getPercentatgeExit(idJugador);
-		
-		// Guardar nou percentatge èxit
-		Jugador jugador = jugadorRepo.getById(idJugador);
-		jugador.setPercentatgeExit(exit);
-		jugadorRepo.save(jugador);
+		Optional<Jugador> jugadorOpt = jugadorRepo.findById(idJugador);
+		Jugador jugador;
+		if (jugadorOpt.isPresent()) {
+			jugador = jugadorOpt.get();
+			
+			// Assignar un jugador a una partida
+			partida.setJugador(jugador);
+						
+			// Guardar la partida
+			partidaRepo.save(partida);
+			
+			// Obtenir % èxit i guardar-lo al jugador
+			jugador.setPercentatgeExit(getPercentatgeExit(idJugador));
+			
+			// Guardar jugador a la base de dades
+			jugadorRepo.save(jugador);
+			
+		} else {
+			System.err.println("No existeix el jugador!");
+			jugador = null;
+		}
+
 	}
 	
+//	@Override
+//	public void eliminarPartidesJugadorId(Integer idJugador) {
+//		// Buscar jugador a la base de dades
+//		Jugador jugador = jugadorRepo.getById(idJugador);
+//
+//		// Eliminar les partides del jugador
+//		partidaRepo.deleteByJugador(jugador);
+//
+//		// Actualitzar percentatgeExit a 0
+//		jugador.setPercentatgeExit(0);
+//		
+//		// Guardar jugador a la base de dades
+//		jugadorRepo.save(jugador);		
+//	}
+	
 	@Override
-	public void eliminarPartidesJugadorId(Integer idJugador) {
+	public int eliminarPartidesJugadorId(Integer idJugador) {
+		Optional<Jugador> jugadorOpt = jugadorRepo.findById(idJugador);
+		Jugador jugador;
+		int numPartides = 0;
+
 		// Buscar jugador a la base de dades
-		Jugador jugador = jugadorRepo.getById(idJugador);
+		if (jugadorOpt.isPresent()) {
+			jugador = jugadorOpt.get();
+			
+			// Eliminar les partides del jugador
+			numPartides = partidaRepo.deletePartidaByJugadorIdJugador(idJugador);
 
-		// Eliminar les partides del jugador
-		partidaRepo.deleteByJugador(jugador);
-
-		// Actualitzar percentatgeExit a 0
-		jugador.setPercentatgeExit(0);
-		
-		// Guardar jugador a la base de dades
-		jugadorRepo.save(jugador);		
+			// Actualitzar percentatgeExit a 0
+			jugador.setPercentatgeExit(0);
+			
+			// Guardar jugador a la base de dades
+			jugadorRepo.save(jugador);		
+			
+		} else {
+			System.err.println("No existeix el jugador!");
+		}
+		return numPartides;
 	}
 	
 	@Override
@@ -139,7 +189,8 @@ public class JocDausServiceImpl implements JocDausService {
 	
 	@Override
 	public List<Partida> partidesJugadorById(Integer idJugador) {
-		return partidaRepo.getByJugadorIdJugador(idJugador);
+	//	return partidaRepo.getByJugadorIdJugador(idJugador);
+		return partidaRepo.findPartidaByJugadorIdJugador(idJugador);
 	}
 	
 }

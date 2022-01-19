@@ -1,4 +1,4 @@
-package com.jocdedaus.apidaus.model.entity;
+package com.jocdedaus.apidaus.model.document;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

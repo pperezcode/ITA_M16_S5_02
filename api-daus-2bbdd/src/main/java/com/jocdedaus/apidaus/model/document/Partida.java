@@ -1,23 +1,17 @@
-package com.jocdedaus.apidaus.model.entity;
+package com.jocdedaus.apidaus.model.document;
 
 import java.util.Random;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jocdedaus.apidaus.model.entity.Jugador;
 
 @Document(collection = "Partides")
-@Entity
-@Table(name = "Partides")
 public class Partida {
 
 	public Partida() {
@@ -30,25 +24,25 @@ public class Partida {
 		}	
 	}
 	
+	@Transient
+	public static final String SEQUENCE_NAME = "partides_sequence";
+		
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "IdPartida")
 	private Integer idPartida;
 	
-	@Column(name = "Dau1")
+	@Field(name = "Dau1")
 	private int dau1;
 	
-	@Column(name = "Dau2")
+	@Field(name = "Dau2")
 	private int dau2;
 	
-	@Column(name = "Resultat")
+	@Field(name = "Resultat")
 	private int resultat;
 	
-	@Column(name = "Victoria")
+	@Field(name = "Victoria")
 	private boolean victoria;
 	
-	@ManyToOne
-	@JoinColumn(name = "IdJugador", nullable = false)
+	@Field(name = "Jugador")
 	@JsonIgnore
 	private Jugador jugador;
 

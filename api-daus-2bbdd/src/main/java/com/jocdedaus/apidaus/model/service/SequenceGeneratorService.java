@@ -11,7 +11,8 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import com.jocdedaus.apidaus.model.entity.DatabaseSequence;
+import com.jocdedaus.apidaus.model.document.DatabaseSequence;
+
 
 @Service
 public class SequenceGeneratorService {
